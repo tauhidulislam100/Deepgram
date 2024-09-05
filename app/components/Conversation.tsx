@@ -417,26 +417,26 @@ export default function Conversation(): JSX.Element {
   /**
    * keep deepgram connection alive when mic closed
    */
-  useEffect(() => {
-    let keepAlive: any;
-    if (connection && connectionReady && !microphoneOpen) {
-      keepAlive = setInterval(() => {
-        // should stop spamming dev console when working on frontend in devmode
-        if (connection?.getReadyState() !== LiveConnectionState.OPEN) {
-          clearInterval(keepAlive);
-        } else {
-          connection.keepAlive();
-        }
-      }, 10000);
-    } else {
-      clearInterval(keepAlive);
-    }
+  // useEffect(() => {
+  //   let keepAlive: any;
+  //   if (connection && connectionReady && !microphoneOpen) {
+  //     keepAlive = setInterval(() => {
+  //       // should stop spamming dev console when working on frontend in devmode
+  //       if (connection?.getReadyState() !== LiveConnectionState.OPEN) {
+  //         clearInterval(keepAlive);
+  //       } else {
+  //         connection.keepAlive();
+  //       }
+  //     }, 10000);
+  //   } else {
+  //     clearInterval(keepAlive);
+  //   }
 
-    // prevent duplicate timeouts
-    return () => {
-      clearInterval(keepAlive);
-    };
-  }, [connection, connectionReady, microphoneOpen]);
+  //   // prevent duplicate timeouts
+  //   return () => {
+  //     clearInterval(keepAlive);
+  //   };
+  // }, [connection, connectionReady, microphoneOpen]);
 
   // this works
   useEffect(() => {
