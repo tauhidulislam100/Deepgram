@@ -63,7 +63,7 @@ export default function Home() {
         </div>
 
         {/* height 100% minus 8rem */}
-        <main className="mx-auto max-w-7xl  px-4 md:px-6 lg:px-8 h-[calc(100%-8rem)]">
+        <main className="mx-auto max-w-7xl  px-4 md:px-6 lg:px-8 min-h-[calc(100%-8rem)]">
           {/* <Conversation /> */}
           <ConversationAgent />
         </main>
