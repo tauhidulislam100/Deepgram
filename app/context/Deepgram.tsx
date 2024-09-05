@@ -168,11 +168,11 @@ const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
       if (!connection && !connecting) {
         setConnecting(true);
 
-        const connection = new LiveClient(
-          await getApiKey(token as string),
-          {},
-          defaultSttsOptions
-        );
+        const connection = new LiveClient({
+
+          key: await getApiKey(token as string),
+          ...defaultSttsOptions
+        });
 
         setConnection(connection);
         setConnecting(false);

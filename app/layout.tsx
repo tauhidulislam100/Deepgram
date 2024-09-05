@@ -16,6 +16,7 @@ import "./globals.css";
 
 import type { Metadata, Viewport } from "next";
 import { AuthContextProvider } from "./context/Auth";
+import { WebSocketProvider } from "./context/WebScoket";
 
 const inter = Inter({ subsets: ["latin"] });
 const favorit = localFont({
@@ -55,15 +56,9 @@ export default function RootLayout({
       >
         <AuthContextProvider>
           <ToastContextProvider>
-            <MicrophoneContextProvider>
-              <AudioStoreContextProvider>
-                <NowPlayingContextProvider>
-                  <MessageMetadataContextProvider>
-                    <DeepgramContextProvider>{children}</DeepgramContextProvider>
-                  </MessageMetadataContextProvider>
-                </NowPlayingContextProvider>
-              </AudioStoreContextProvider>
-            </MicrophoneContextProvider>
+            <WebSocketProvider>
+                          {children}
+            </WebSocketProvider>
           </ToastContextProvider>
         </AuthContextProvider>
         <GoogleTagManager gtmId="GTM-5R73N627" />

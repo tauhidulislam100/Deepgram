@@ -994,7 +994,7 @@
   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.20.13", "@babel/runtime@^7.3.1", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.20.13", "@babel/runtime@^7.25.6", "@babel/runtime@^7.3.1", "@babel/runtime@^7.8.4":
   version "7.25.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.25.6.tgz#9afc3289f7184d8d7f98b099884c26317b9264d2"
   integrity sha512-VBj9MYyDb9tuLq7yzqjgzt6Q+IBQLrGZfdjOekyEirZPHxXWoTSGUTMrpsfi58Up73d13NfYLv8HT9vmznjzhQ==
@@ -4431,6 +4431,14 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
+
+automation-events@^7.0.9:
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/automation-events/-/automation-events-7.0.9.tgz#5962fddc4d08f5ea16710b3c2432248d915907ad"
+  integrity sha512-BvN5ynKILdG5UoONshTQu+9W1LXXtBR//OHvAjOe1XfQ1Y4muFyApjcG71alVIyVwsJLBjbh1jqbTrU22FuZEA==
+  dependencies:
+    "@babel/runtime" "^7.25.6"
+    tslib "^2.7.0"
 
 autoprefixer@^10.0.1:
   version "10.4.20"
@@ -8046,6 +8054,11 @@ react-toastify@^10.0.4:
   dependencies:
     clsx "^2.1.0"
 
+react-use-websocket@^4.8.1:
+  version "4.8.1"
+  resolved "https://registry.yarnpkg.com/react-use-websocket/-/react-use-websocket-4.8.1.tgz#be06a0bc956c6d56391a29cbe2caa6ae8edb5615"
+  integrity sha512-FTXuG5O+LFozmu1BRfrzl7UIQngECvGJmL7BHsK4TYXuVt+mCizVA8lT0hGSIF0Z0TedF7bOo1nRzOUdginhDw==
+
 react@^18:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react/-/react-18.3.1.tgz#49ab892009c53933625bd16b2533fc754cab2891"
@@ -8422,6 +8435,15 @@ sswr@2.0.0:
   dependencies:
     swrev "^4.0.0"
 
+standardized-audio-context@^25.3.70:
+  version "25.3.77"
+  resolved "https://registry.yarnpkg.com/standardized-audio-context/-/standardized-audio-context-25.3.77.tgz#9502c40f3860f0877ce5c53a161f819f23c978f4"
+  integrity sha512-Ki9zNz6pKcC5Pi+QPjPyVsD9GwJIJWgryji0XL9cAJXMGyn+dPOf6Qik1AHei0+UNVcc4BOCa0hWLBzlwqsW/A==
+  dependencies:
+    "@babel/runtime" "^7.25.6"
+    automation-events "^7.0.9"
+    tslib "^2.7.0"
+
 stop-iteration-iterator@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/stop-iteration-iterator/-/stop-iteration-iterator-1.0.0.tgz#6a60be0b4ee757d1ed5254858ec66b10c49285e4"
@@ -8759,6 +8781,14 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
+tone@^15.0.4:
+  version "15.0.4"
+  resolved "https://registry.yarnpkg.com/tone/-/tone-15.0.4.tgz#d98f76a5886c0fd7bff41c43399972ac088f1ee6"
+  integrity sha512-Fr2xATgdkNhzwMZhrU0DXpkXQyambq73hjHRrBiC0Wkc6aPYRdmkySE9kRFAW878zgMiD+Lqvn/uNHt/7hbdnQ==
+  dependencies:
+    standardized-audio-context "^25.3.70"
+    tslib "^2.3.1"
+
 tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
@@ -8794,7 +8824,7 @@ tsconfig-paths@^3.15.0:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0, tslib@^2.6.2:
+tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.6.2, tslib@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.7.0.tgz#d9b40c5c40ab59e8738f297df3087bf1a2690c01"
   integrity sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==
