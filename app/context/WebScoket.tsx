@@ -294,7 +294,7 @@ export const WebSocketProvider = ({ children }:WebSocketProvider) => {
 
           // send message to socket
           sendMessage(inputData.buffer);
-          console.log("Message sent! askdfjdk");
+          console.log("Message sent!");
           // Update blob size based on audio level
           // updateBlobSize(rms * 5); // Adjust the scaling factor as needed
         };
@@ -315,7 +315,7 @@ export const WebSocketProvider = ({ children }:WebSocketProvider) => {
         audioContextRef.current.close().catch(err => console.log("Error closing ", err));
       }
     };
-  }, []);
+  }, [connection]);
 
   return <WebSocketContext.Provider value={value}>{children}</WebSocketContext.Provider>;
 };
