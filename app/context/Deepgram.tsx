@@ -34,12 +34,12 @@ interface DeepgramContextInterface {
 
 const DeepgramContext = createContext({} as DeepgramContext);
 
-const DEFAULT_TTS_MODEL = 'aura-asteria-en';
-const DEFAULT_STT_MODEL = 'nova-2';
+const DEFAULT_TTS_MODEL = "aura-asteria-en";
+const DEFAULT_STT_MODEL = "nova-2";
 
 const defaultTtsOptions = {
-  model: DEFAULT_TTS_MODEL
-}
+  model: DEFAULT_TTS_MODEL,
+};
 
 const defaultSttsOptions = {
   model: DEFAULT_STT_MODEL,
@@ -48,7 +48,7 @@ const defaultSttsOptions = {
   endpointing: 550,
   utterance_end_ms: 1500,
   filler_words: true,
-}
+};
 
 /**
  * TTS Voice Options
@@ -149,8 +149,12 @@ const getApiKey = async (): Promise<string> => {
 
 const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
   const { toast } = useToast();
-  const [ttsOptions, setTtsOptions] = useLocalStorage<SpeakSchema | undefined>('ttsModel');
-  const [sttOptions, setSttOptions] = useLocalStorage<LiveSchema | undefined>('sttModel');
+  const [ttsOptions, setTtsOptions] = useLocalStorage<SpeakSchema | undefined>(
+    "ttsModel"
+  );
+  const [sttOptions, setSttOptions] = useLocalStorage<LiveSchema | undefined>(
+    "sttModel"
+  );
   const [connection, setConnection] = useState<LiveClient>();
   const [connecting, setConnecting] = useState<boolean>(false);
   const [connectionReady, setConnectionReady] = useState<boolean>(false);
@@ -197,7 +201,14 @@ const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
     if (connection === undefined) {
       connect(defaultSttsOptions);
     }
-  }, [connect, connection, setSttOptions, setTtsOptions, sttOptions, ttsOptions]);
+  }, [
+    connect,
+    connection,
+    setSttOptions,
+    setTtsOptions,
+    sttOptions,
+    ttsOptions,
+  ]);
 
   useEffect(() => {
     if (connection && connection?.getReadyState() !== undefined) {

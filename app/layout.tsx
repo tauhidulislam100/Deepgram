@@ -11,10 +11,11 @@ import { MicrophoneContextProvider } from "./context/Microphone";
 import { AudioStoreContextProvider } from "./context/AudioStore";
 import { ToastContextProvider } from "./context/Toast";
 
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 import type { Metadata, Viewport } from "next";
+import { WebSocketProvider } from "./context/WebSocketContext";
 
 const inter = Inter({ subsets: ["latin"] });
 const favorit = localFont({
@@ -53,15 +54,17 @@ export default function RootLayout({
         )}`}
       >
         <ToastContextProvider>
-          <MicrophoneContextProvider>
-            <AudioStoreContextProvider>
-              <NowPlayingContextProvider>
-                <MessageMetadataContextProvider>
-                  <DeepgramContextProvider>{children}</DeepgramContextProvider>
-                </MessageMetadataContextProvider>
-              </NowPlayingContextProvider>
-            </AudioStoreContextProvider>
-          </MicrophoneContextProvider>
+          {/* <MicrophoneContextProvider> */}
+          {/* <AudioStoreContextProvider> */}
+          {/* <NowPlayingContextProvider> */}
+          {/* <MessageMetadataContextProvider> */}
+          {/* <DeepgramContextProvider> */}
+          <WebSocketProvider>{children}</WebSocketProvider>
+          {/* </DeepgramContextProvider> */}
+          {/* </MessageMetadataContextProvider> */}
+          {/* </NowPlayingContextProvider> */}
+          {/* </AudioStoreContextProvider> */}
+          {/* </MicrophoneContextProvider> */}
         </ToastContextProvider>
         <GoogleTagManager gtmId="GTM-5R73N627" />
         <Script
