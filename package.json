@@ -34,6 +34,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-textarea-autosize": "^8.5.3",
     "react-toastify": "^10.0.4",
+    "react-use-websocket": "^4.8.1",
     "remark-gfm": "^4.0.0",
     "swr": "^2.2.4"
   },
