@@ -11,7 +11,7 @@ import {
 import { useCallback } from "react";
 import { MicrophoneIcon } from "./icons/MicrophoneIcon";
 import { useWebSocketContext } from "../context/WebSocketContext";
-import { Download } from "./Download";
+import { DownloadAgent } from "./Download";
 import { useToast } from "../context/Toast";
 import { CogIcon } from "./icons/CogIcon";
 import { voiceMap } from "../context/Deepgram";
@@ -20,11 +20,12 @@ import { VoiceSelection, ModelSelection } from "./Selection";
 export const AgentSettings = () => {
   const { toast } = useToast();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { voice, setVoice, setModel, model } = useWebSocketContext();
+  const { voice, setVoice, setModel, model, chatMessages } =
+    useWebSocketContext();
 
   return (
     <>
-      <div className="flex items-center gap-2.5 text-sm">
+      <div className="flex items-center gap-2.5 text-sm mr-4">
         <span className="bg-gradient-to-r to-[#13EF93]/50 from-[#149AFB]/80 rounded-full flex">
           <a
             className={`relative m-px bg-black md:w-[9.25rem] w-10 h-10 rounded-full text-sm p-2.5 group md:hover:w-[9.25rem] transition-all ease-in-out duration-1000 overflow-hidden whitespace-nowrap`}
@@ -39,6 +40,7 @@ export const AgentSettings = () => {
           Voice: <span className="text-white">{voiceMap(voice)?.name}</span>
         </span>
       </div>
+      <DownloadAgent messages={chatMessages} />
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}

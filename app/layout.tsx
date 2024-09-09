@@ -1,14 +1,8 @@
 import { GoogleTagManager } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
-import { NowPlayingContextProvider } from "react-nowplaying";
 import classNames from "classnames";
 import localFont from "next/font/local";
 import Script from "next/script";
-
-import { DeepgramContextProvider } from "./context/Deepgram";
-import { MessageMetadataContextProvider } from "./context/MessageMetadata";
-import { MicrophoneContextProvider } from "./context/Microphone";
-import { AudioStoreContextProvider } from "./context/AudioStore";
 import { ToastContextProvider } from "./context/Toast";
 
 import "react-toastify/dist/ReactToastify.css";
