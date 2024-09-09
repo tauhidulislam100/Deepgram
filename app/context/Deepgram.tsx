@@ -2,6 +2,7 @@
 
 import {
   CreateProjectKeyResponse,
+  DeepgramClientOptions,
   LiveClient,
   LiveSchema,
   LiveTranscriptionEvents,
@@ -18,6 +19,7 @@ import {
 } from "react";
 import { useToast } from "./Toast";
 import { useLocalStorage } from "../lib/hooks/useLocalStorage";
+import { useAuth } from "./Auth";
 
 type DeepgramContext = {
   ttsOptions: SpeakSchema | undefined;
@@ -41,14 +43,7 @@ const defaultTtsOptions = {
   model: DEFAULT_TTS_MODEL,
 };
 
-const defaultSttsOptions = {
-  model: DEFAULT_STT_MODEL,
-  interim_results: true,
-  smart_format: true,
-  endpointing: 550,
-  utterance_end_ms: 1500,
-  filler_words: true,
-};
+const defaultSttsOptions = {};
 
 /**
  * TTS Voice Options
@@ -139,9 +134,14 @@ const voiceMap = (model: string) => {
   return voices[model];
 };
 
-const getApiKey = async (): Promise<string> => {
+const getApiKey = async (token: string): Promise<string> => {
   const result: CreateProjectKeyResponse = await (
-    await fetch("/api/authenticate", { cache: "no-store" })
+    await fetch("/api/authenticate", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    })
   ).json();
 
   return result.key;
@@ -149,6 +149,7 @@ const getApiKey = async (): Promise<string> => {
 
 const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
   const { toast } = useToast();
+  const { isAuthenticated, token, handleLogin } = useAuth();
   const [ttsOptions, setTtsOptions] = useLocalStorage<SpeakSchema | undefined>(
     "ttsModel"
   );
@@ -160,22 +161,21 @@ const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
   const [connectionReady, setConnectionReady] = useState<boolean>(false);
 
   const connect = useCallback(
-    async (defaultSttsOptions: SpeakSchema) => {
+    async (defaultSttsOptions: DeepgramClientOptions) => {
+      if (!isAuthenticated) return;
       if (!connection && !connecting) {
         setConnecting(true);
 
-        const connection = new LiveClient(
-          await getApiKey(),
-          {},
-          defaultSttsOptions
-        );
+        const connection = new LiveClient(await getApiKey(token as string), {
+          ...defaultSttsOptions,
+        });
 
         setConnection(connection);
         setConnecting(false);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [connecting, connection]
+    [connecting, connection, token]
   );
 
   useEffect(() => {

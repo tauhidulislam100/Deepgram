@@ -1,35 +1,11 @@
 "use client";
-
-import {
-  LiveClient,
-  LiveConnectionState,
-  LiveTranscriptionEvent,
-  LiveTranscriptionEvents,
-} from "@deepgram/sdk";
-import { Message, useChat } from "ai/react";
-import { NextUIProvider } from "@nextui-org/react";
-import { useMicVAD } from "@ricky0123/vad-react";
-import { useNowPlaying } from "react-nowplaying";
-import { useQueue } from "@uidotdev/usehooks";
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { AgentChatBubble, ChatBubble } from "./ChatBubble";
-import {
-  contextualGreeting,
-  generateRandomString,
-  utteranceText,
-} from "../lib/helpers";
-import { Controls } from "./Controls";
-import { InitialLoad } from "./InitialLoad";
-import { MessageMetadata } from "../lib/types";
-import { RightBubble } from "./RightBubble";
-import { systemContent } from "../lib/constants";
-import { useDeepgram } from "../context/Deepgram";
-import { useMessageData } from "../context/MessageMetadata";
-import { useMicrophone } from "../context/Microphone";
-import { useAudioStore } from "../context/AudioStore";
 import { useWebSocketContext } from "../context/WebSocketContext";
 import { AgentControls } from "./AgentControls";
+import { InitialLoadAgent } from "./InitialLoadAgent";
+import { NextUIProvider } from "@nextui-org/react";
 
 /**
  * Conversation element that contains the conversational AI app.
@@ -46,7 +22,6 @@ export default function ConversationAgent(): JSX.Element {
    * State
    */
   const [initialLoad, setInitialLoad] = useState(true);
-  const [isProcessing, setProcessing] = useState(false);
 
   const startConversation = () => {
     startStreaming();
@@ -76,7 +51,7 @@ export default function ConversationAgent(): JSX.Element {
                 >
                   <div className="grid grid-cols-12 overflow-x-auto gap-y-2">
                     {initialLoad ? (
-                      <InitialLoad
+                      <InitialLoadAgent
                         fn={startConversation}
                         connecting={!connection}
                       />
