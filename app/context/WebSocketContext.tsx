@@ -46,7 +46,6 @@ type WebSocketProviderProps = { children: ReactNode };
 // Constants
 const DEEPGRAM_SOCKET_URL = process.env
   .NEXT_PUBLIC_DEEPGRAM_SOCKET_URL as string;
-
 const PING_INTERVAL = 10000; // 10s
 
 // Context Creation
