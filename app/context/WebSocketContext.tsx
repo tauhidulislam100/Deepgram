@@ -10,6 +10,8 @@ import React, {
   useCallback,
 } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { getApiKey } from "../lib/helpers";
+import { useAuth } from "./Auth";
 
 // Types and Interfaces
 type Message = {
@@ -44,8 +46,7 @@ type WebSocketProviderProps = { children: ReactNode };
 // Constants
 const DEEPGRAM_SOCKET_URL = process.env
   .NEXT_PUBLIC_DEEPGRAM_SOCKET_URL as string;
-const DEEPGRAM_API_KEY = process.env.NEXT_PUBLIC_DEEPGRAM_API_KEY as string;
-const PING_INTERVAL = 10000; // 10s
+const PING_INTERVAL = 8000; // 8s
 
 // Context Creation
 const WebSocketContext = createContext<WebSocketContextValue | undefined>(
@@ -62,6 +63,7 @@ const concatArrayBuffers = (buffer1: ArrayBuffer, buffer2: ArrayBuffer) => {
 
 // WebSocket Provider Component
 export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
+  const { token } = useAuth();
   // State
   const [connection, setConnection] = useState(false);
   const [voice, setVoice] = useState("aura-asteria-en");
@@ -73,6 +75,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     `${DEEPGRAM_SOCKET_URL}?t=${Date.now()}`
   );
   const [startTime, setStartTime] = useState(0);
+  const [apiKey, setApiKey] = useState<string | null>(null);
 
   // Refs
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -93,7 +96,9 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     agent: {
       listen: { model: "nova-2" },
       think: {
-        provider: model.split("+")[0],
+        provider: {
+          type: model.split("+")[0],
+        },
         model: model.split("+")[1],
         instructions:
           "You are a helpful assistant who responds in 1-2 sentences at most each time.",
@@ -106,7 +111,8 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
   const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
     socketURL,
     {
-      protocols: ["token", DEEPGRAM_API_KEY],
+      // protocols: ["token", DEEPGRAM_API_KEY],
+      protocols: apiKey ? ["token", apiKey] : undefined,
       share: true,
       onOpen: () => {
         const socket = getWebSocket();
@@ -305,6 +311,20 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     setStartTime(0);
   }, [startTime]);
 
+  // Utility functions
+  const startPingInterval = useCallback(() => {
+    pingIntervalRef.current = setInterval(() => {
+      sendMessage(JSON.stringify({ type: "KeepAlive" }));
+    }, PING_INTERVAL);
+  }, [sendMessage]);
+
+  const stopPingInterval = useCallback(() => {
+    if (pingIntervalRef.current) {
+      clearInterval(pingIntervalRef.current);
+      pingIntervalRef.current = null;
+    }
+  }, []);
+
   // Streaming functions
   const startStreaming = useCallback(async () => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -355,7 +375,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
       }
       setMicrophoneOpen(false);
     }
-  }, [sendMessage]);
+  }, [sendMessage, stopPingInterval]);
 
   const stopStreaming = useCallback(() => {
     if (processorRef.current) {
@@ -379,21 +399,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     setConnection(false);
     setCurrentSpeaker(null);
     setMicrophoneOpen(false);
-  }, []);
-
-  // Utility functions
-  const startPingInterval = useCallback(() => {
-    pingIntervalRef.current = setInterval(() => {
-      sendMessage(JSON.stringify({ type: "KeepAlive" }));
-    }, PING_INTERVAL);
-  }, [sendMessage]);
-
-  const stopPingInterval = useCallback(() => {
-    if (pingIntervalRef.current) {
-      clearInterval(pingIntervalRef.current);
-      pingIntervalRef.current = null;
-    }
-  }, []);
+  }, [startPingInterval]);
 
   const updateVoice = useCallback(
     (newVoice: string) => {
@@ -414,13 +420,43 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
   );
 
   // Effects
+
+  // Effect to fetch API key
+  useEffect(() => {
+    if (token) {
+      const fetchApiKey = async () => {
+        try {
+          const key = await getApiKey(token as string);
+          setApiKey(key);
+        } catch (error) {
+          console.error("Failed to fetch API key:", error);
+        }
+      };
+
+      fetchApiKey();
+    }
+  }, [token]);
+
+  // Effect to update socket URL when API key is available
+  useEffect(() => {
+    if (apiKey) {
+      setSocketUrl(`${DEEPGRAM_SOCKET_URL}?t=${Date.now()}`);
+    }
+  }, [apiKey]);
+
   useEffect(() => {
     const [provider, modelName] = model.split("+");
     const newSettings = {
       ...configSettings,
       agent: {
         ...configSettings.agent,
-        think: { ...configSettings.agent.think, provider, model: modelName },
+        think: {
+          ...configSettings.agent.think,
+          provider: {
+            type: provider,
+          },
+          model: modelName,
+        },
         speak: { model: voice },
       },
     };
